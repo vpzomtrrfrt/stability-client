@@ -46,7 +46,7 @@ type RequiredStabilityOptions = {
 type StabilityOptions = RequiredStabilityOptions &
   Required<DraftStabilityOptions>
 
-type ImageData = { buffer: Buffer; filePath: string }
+type ImageData = { buffer: Buffer; filePath: string; seed: number }
 type ResponseData = {
   isOk: boolean
   status: keyof grpc.Code
@@ -190,6 +190,7 @@ export const generate: (
               api.emit('image', {
                 buffer,
                 filePath,
+                seed: innerSeed,
               })
             }
           }
