@@ -27,7 +27,7 @@ type DraftStabilityOptions = Partial<{
   debug: boolean
   requestId: string
   samples: number
-  engine: 'stable-diffusion-v1'
+  engine: string
   host: string
   seed: number
   width: number
