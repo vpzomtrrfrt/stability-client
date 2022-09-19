@@ -1,18 +1,18 @@
-# Stability TS
-A TypeScript client for the Stability AI SDK.
+# stability-client
+A client library for the Stability AI SDK.
 
 [Requires an API Key for DreamStudio which can be found here.](https://beta.dreamstudio.ai/membership)
 
 ## Installation
 ```sh
 # NPM
-npm i -g stability-ts
+npm i -g stability-client
 
 # To Update
-npm update -g stability-ts
+npm update -g stability-client
 
 # Yarn
-yarn global add stability-ts
+yarn global add stability-client
 ```
 
 ## Example
@@ -35,7 +35,7 @@ stability \
 
 ## API
 ```ts
-import { generate } from 'stability-ts'
+import { generate } from 'stability-client'
 
 const api = generate({
   prompt: 'A Stunning House',
@@ -53,7 +53,7 @@ api.on('end', (data) => {
 
 Async/Promise API
 ```ts
-import { generateAsync } from 'stability-ts'
+import { generateAsync } from 'stability-client'
 
 try {
   const { res, images } = await generateAsync({
@@ -87,7 +87,7 @@ Options:
   -e, --engine <engine>            engine to use for inference (default: "stable-diffusion-v1")
   --no-store                       do not write aritfacts to disk
   -k, --api-key <api-key>          DreamStudio API Key (env: DREAMSTUDIO_API_KEY)
-  -o, --output-dir <outputDir>     directory to store images (default: "/Users/jacobkelley/code/stability-ts")
+  -o, --output-dir <outputDir>     directory to store images (defaults to cwd)
   -d, --debug                      Additional logging
   -h, --help                       display help for command
 ```
