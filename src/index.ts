@@ -12,6 +12,7 @@ import {
   Answer,
   ArtifactType,
   PromptParameters,
+  ScheduleParameters,
 } from 'stability-sdk/gooseai/generation/generation_pb'
 import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport'
 import uuid4 from 'uuid4'
@@ -39,6 +40,7 @@ type DraftStabilityOptions = Partial<{
   cfgScale: number
   noStore: boolean
   imagePrompt: {mime: string; content: Buffer} | null
+  stepSchedule: {start?: number; end?: number}
 }>
 
 type RequiredStabilityOptions = {
@@ -85,6 +87,7 @@ const withDefaults: (
     debug: Boolean(draft.debug),
     noStore: Boolean(draft.noStore),
     imagePrompt: draft.imagePrompt ?? null,
+    stepSchedule: draft.stepSchedule ?? {},
   }
 }
 
@@ -102,6 +105,7 @@ export const generate: (
     steps,
     cfgScale,
     samples,
+    stepSchedule,
     outDir,
     prompt: promptText,
     imagePrompt: imagePromptData,
@@ -150,6 +154,10 @@ export const generate: (
   const transform = new TransformType()
   transform.setDiffusion(diffusionMap[diffusion])
   image.setTransform(transform)
+
+  const schedule = new ScheduleParameters()
+  if(typeof stepSchedule.start !== "undefined") schedule.setStart(stepSchedule.start)
+  if(typeof stepSchedule.end !== "undefined") schedule.setEnd(stepSchedule.end)
 
   const step = new StepParameter()
   step.setScaledStep(0)
