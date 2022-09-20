@@ -1,6 +1,7 @@
 import { grpc } from '@improbable-eng/grpc-web'
 import { GenerationService } from 'stability-sdk/gooseai/generation/generation_pb_service'
 import {
+  Artifact,
   Request,
   Prompt,
   ImageParameters,
@@ -10,6 +11,7 @@ import {
   ClassifierParameters,
   Answer,
   ArtifactType,
+  PromptParameters,
 } from 'stability-sdk/gooseai/generation/generation_pb'
 import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport'
 import uuid4 from 'uuid4'
@@ -36,6 +38,7 @@ type DraftStabilityOptions = Partial<{
   steps: number
   cfgScale: number
   noStore: boolean
+  imagePrompt: {mime: string; content: Buffer} | null
 }>
 
 type RequiredStabilityOptions = {
@@ -81,6 +84,7 @@ const withDefaults: (
     outDir: draft.outDir ?? path.join(process.cwd(), '.out', requestId),
     debug: Boolean(draft.debug),
     noStore: Boolean(draft.noStore),
+    imagePrompt: draft.imagePrompt ?? null,
   }
 }
 
@@ -100,6 +104,7 @@ export const generate: (
     samples,
     outDir,
     prompt: promptText,
+    imagePrompt: imagePromptData,
     apiKey,
     noStore,
     debug,
@@ -119,6 +124,21 @@ export const generate: (
   const prompt = new Prompt()
   prompt.setText(promptText)
   request.addPrompt(prompt)
+
+  if(imagePromptData !== null) {
+    const artifact = new Artifact()
+    artifact.setType(ArtifactType.ARTIFACT_IMAGE)
+    artifact.setMime(imagePromptData.mime)
+    artifact.setBinary(imagePromptData.content)
+
+    const parameters = new PromptParameters()
+    parameters.setInit(true)
+
+    const imagePrompt = new Prompt()
+    imagePrompt.setArtifact(artifact)
+    imagePrompt.setParameters(parameters)
+    request.addPrompt(imagePrompt)
+  }
 
   const image = new ImageParameters()
   image.setWidth(width)
