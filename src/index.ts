@@ -161,6 +161,7 @@ export const generate: (
 
   const step = new StepParameter()
   step.setScaledStep(0)
+  step.setSchedule(schedule)
 
   const sampler = new SamplerParameters()
   sampler.setCfgScale(cfgScale)
