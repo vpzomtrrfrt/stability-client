@@ -51,7 +51,7 @@ type RequiredStabilityOptions = {
 type StabilityOptions = RequiredStabilityOptions &
   Required<DraftStabilityOptions>
 
-type ImageData = { buffer: Buffer; filePath: string; seed: number; mimeType: string }
+type ImageData = { buffer: Buffer; filePath: string; seed: number; mimeType: string; requestId: string;}
 type ResponseData = {
   isOk: boolean
   status: keyof grpc.Code
@@ -221,6 +221,7 @@ export const generate: (
                 filePath,
                 seed: innerSeed,
                 mimeType,
+                requestId,
               })
             }
           }
