@@ -39,8 +39,8 @@ type DraftStabilityOptions = Partial<{
   steps: number
   cfgScale: number
   noStore: boolean
-  imagePrompt: {mime: string; content: Buffer} | null
-  stepSchedule: {start?: number; end?: number}
+  imagePrompt: { mime: string; content: Buffer } | null
+  stepSchedule: { start?: number; end?: number }
 }>
 
 type RequiredStabilityOptions = {
@@ -56,7 +56,7 @@ type ImageData = {
   filePath: string
   seed: number
   mimeType: string
-  classifications: {realizedAction: number}
+  classifications: { realizedAction: number }
 }
 
 type ResponseData = {
@@ -136,7 +136,7 @@ export const generate: (
   prompt.setText(promptText)
   request.addPrompt(prompt)
 
-  if(imagePromptData !== null) {
+  if (imagePromptData !== null) {
     const artifact = new Artifact()
     artifact.setType(ArtifactType.ARTIFACT_IMAGE)
     artifact.setMime(imagePromptData.mime)
@@ -163,8 +163,9 @@ export const generate: (
   image.setTransform(transform)
 
   const schedule = new ScheduleParameters()
-  if(typeof stepSchedule.start !== "undefined") schedule.setStart(stepSchedule.start)
-  if(typeof stepSchedule.end !== "undefined") schedule.setEnd(stepSchedule.end)
+  if (typeof stepSchedule.start !== 'undefined')
+    schedule.setStart(stepSchedule.start)
+  if (typeof stepSchedule.end !== 'undefined') schedule.setEnd(stepSchedule.end)
 
   const step = new StepParameter()
   step.setScaledStep(0)
@@ -209,24 +210,27 @@ export const generate: (
       if (answer.artifactsList) {
         let image: Artifact.AsObject | null = null
         let classifications: Artifact.AsObject | null = null
-        answer.artifactsList.forEach(
-          (artifact) => {
-            if (artifact.type === ArtifactType.ARTIFACT_IMAGE) {
-              if (image !== null) throw new Error('Unexpectedly got multiple images in single answer')
-              image = artifact
+        answer.artifactsList.forEach((artifact) => {
+          if (artifact.type === ArtifactType.ARTIFACT_IMAGE) {
+            if (image !== null)
+              throw new Error(
+                'Unexpectedly got multiple images in single answer'
+              )
+            image = artifact
+          } else if (artifact.type === ArtifactType.ARTIFACT_CLASSIFICATIONS) {
+            if (classifications !== null) {
+              throw new Error(
+                'Unexpectedly got multiple classification artifacts in single answer'
+              )
             }
-            else if (artifact.type === ArtifactType.ARTIFACT_CLASSIFICATIONS) {
-              if (classifications !== null) {
-                throw new Error('Unexpectedly got multiple classification artifacts in single answer')
-              }
 
-              classifications = artifact
-            }
+            classifications = artifact
           }
-        )
+        })
 
         if (image !== null) {
-          if (classifications === null) throw new Error('Missing classifications in answer')
+          if (classifications === null)
+            throw new Error('Missing classifications in answer')
 
           const { id, mime: mimeType, binary, seed: innerSeed } = image
 
@@ -250,7 +254,9 @@ export const generate: (
             filePath,
             seed: innerSeed,
             mimeType,
-            classifications: {realizedAction: claz.classifier!.realizedAction},
+            classifications: {
+              realizedAction: claz.classifier!.realizedAction,
+            },
           })
         }
       }

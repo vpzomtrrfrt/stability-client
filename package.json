@@ -9,7 +9,7 @@
     "prebuild": "yarn clean",
     "build": "webpack",
     "postbuild": "tsc -b .",
-	"prepare": "npm run build",
+    "prepare": "npm run build",
     "clean": "rimraf ./build",
     "format": "prettier --write .",
     "lint": "eslint . --fix --ext .ts,.tsx --max-warnings 0"
@@ -18,7 +18,10 @@
     "stability": "build/bin.js"
   },
   "keywords": [],
-  "contributors": ["Jacob Kelley <jakie8@gmail.com>", "Colin Reeder <colin@vpzom.click>"],
+  "contributors": [
+    "Jacob Kelley <jakie8@gmail.com>",
+    "Colin Reeder <colin@vpzom.click>"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.18.13",
