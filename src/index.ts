@@ -83,7 +83,7 @@ const withDefaults: (
     steps: draft.steps ?? 50,
     cfgScale: draft.cfgScale ?? 7,
     samples: draft.samples ?? 1,
-    outDir: draft.outDir ?? path.join(process.cwd(), '.out', requestId),
+    outDir: draft.outDir ?? path.join('.out', requestId),
     debug: Boolean(draft.debug),
     noStore: Boolean(draft.noStore),
     imagePrompt: draft.imagePrompt ?? null,
