@@ -51,7 +51,14 @@ type RequiredStabilityOptions = {
 type StabilityOptions = RequiredStabilityOptions &
   Required<DraftStabilityOptions>
 
-type ImageData = { buffer: Buffer; filePath: string; seed: number; mimeType: string }
+type ImageData = {
+  buffer: Buffer
+  filePath: string
+  seed: number
+  mimeType: string
+  classifications: {realizedAction: number}
+}
+
 type ResponseData = {
   isOk: boolean
   status: keyof grpc.Code
@@ -200,31 +207,52 @@ export const generate: (
       const answer = message.toObject()
 
       if (answer.artifactsList) {
+        let image: Artifact.AsObject | null = null
+        let classifications: Artifact.AsObject | null = null
         answer.artifactsList.forEach(
-          ({ id, type, mime: mimeType, binary, seed: innerSeed }) => {
-            if (type === ArtifactType.ARTIFACT_IMAGE) {
-              // @ts-ignore
-              const buffer = Buffer.from(binary, 'base64')
-              const filePath = path.resolve(
-                path.join(
-                  outDir,
-                  `${answer.answerId}-${id}-${innerSeed}.${mime.getExtension(
-                    mimeType
-                  )}`
-                )
-              )
+          (artifact) => {
+            if (artifact.type === ArtifactType.ARTIFACT_IMAGE) {
+              if (image !== null) throw new Error('Unexpectedly got multiple images in single answer')
+              image = artifact
+            }
+            else if (artifact.type === ArtifactType.ARTIFACT_CLASSIFICATIONS) {
+              if (classifications !== null) {
+                throw new Error('Unexpectedly got multiple classification artifacts in single answer')
+              }
 
-              if (!noStore) fs.writeFileSync(filePath, buffer)
-
-              api.emit('image', {
-                buffer,
-                filePath,
-                seed: innerSeed,
-                mimeType,
-              })
+              classifications = artifact
             }
           }
         )
+
+        if (image !== null) {
+          if (classifications === null) throw new Error('Missing classifications in answer')
+
+          const { id, mime: mimeType, binary, seed: innerSeed } = image
+
+          // @ts-ignore
+          const buffer = Buffer.from(binary, 'base64')
+          const filePath = path.resolve(
+            path.join(
+              outDir,
+              `${answer.answerId}-${id}-${innerSeed}.${mime.getExtension(
+                mimeType
+              )}`
+            )
+          )
+
+          if (!noStore) fs.writeFileSync(filePath, buffer)
+
+          const claz: Artifact.AsObject = classifications
+
+          api.emit('image', {
+            buffer,
+            filePath,
+            seed: innerSeed,
+            mimeType,
+            classifications: {realizedAction: claz.classifier!.realizedAction},
+          })
+        }
       }
     },
     debug,
