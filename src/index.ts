@@ -8,7 +8,6 @@ import {
   SamplerParameters,
   TransformType,
   StepParameter,
-  ClassifierParameters,
   Answer,
   ArtifactType,
   PromptParameters,
@@ -178,9 +177,6 @@ export const generate: (
   image.addParameters(step)
 
   request.setImage(image)
-
-  const classifier = new ClassifierParameters()
-  request.setClassifier(classifier)
   /** End Build Request **/
 
   if (debug) {
