@@ -1,6 +1,6 @@
 {
   "name": "stability-client",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A client for the Stability AI SDK",
   "main": "./build/index.js",
   "repository": "https://github.com/vpzomtrrfrt/stability-client",
