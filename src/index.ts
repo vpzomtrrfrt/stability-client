@@ -38,7 +38,11 @@ type DraftStabilityOptions = Partial<{
   steps: number
   cfgScale: number
   noStore: boolean
-  imagePrompt: { mime: string; content: Buffer } | null
+  imagePrompt: {
+    mime: string
+    content: Buffer
+    mask?: { mime: string; content: Buffer }
+  } | null
   stepSchedule: { start?: number; end?: number }
 }>
 
@@ -148,6 +152,17 @@ export const generate: (
     imagePrompt.setArtifact(artifact)
     imagePrompt.setParameters(parameters)
     request.addPrompt(imagePrompt)
+
+    if (typeof imagePromptData.mask !== 'undefined') {
+      const maskArtifact = new Artifact()
+      maskArtifact.setType(ArtifactType.ARTIFACT_MASK)
+      maskArtifact.setMime(imagePromptData.mask.mime)
+      maskArtifact.setBinary(imagePromptData.mask.content)
+
+      const maskPrompt = new Prompt()
+      maskPrompt.setArtifact(maskArtifact)
+      request.addPrompt(maskPrompt)
+    }
   }
 
   const image = new ImageParameters()
