@@ -31,7 +31,7 @@ type DraftStabilityOptions = Partial<{
   samples: number
   engine: string
   host: string
-  seed: number
+  seed: number | Array<number>
   width: number
   height: number
   diffusion: keyof typeof diffusionMap
@@ -168,7 +168,7 @@ export const generate: (
   const image = new ImageParameters()
   image.setWidth(width)
   image.setHeight(height)
-  image.setSeedList([seed])
+  image.setSeedList(typeof seed === 'number' ? [seed] : seed)
   image.setSteps(steps)
   image.setSamples(samples)
 
