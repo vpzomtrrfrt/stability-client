@@ -48,7 +48,7 @@
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
     "source-map-loader": "^4.0.0",
-    "stability-sdk": "Stability-AI/api-interfaces#d098547f",
+    "stability-sdk": "Stability-AI/api-interfaces#c853ef6",
     "ts-loader": "^9.3.1",
     "typescript": "^4.8.2",
     "webpack": "^5.74.0",

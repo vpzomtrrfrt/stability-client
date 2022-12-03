@@ -12,4 +12,6 @@ export const diffusionMap = {
   k_dpm_2: DiffusionSampler.SAMPLER_K_DPM_2,
   k_dpm_2_ancestral: DiffusionSampler.SAMPLER_K_DPM_2_ANCESTRAL,
   k_lms: DiffusionSampler.SAMPLER_K_LMS,
+  k_dpmpp_25_ancestral: DiffusionSampler.SAMPLER_K_DPMPP_2S_ANCESTRAL,
+  k_dpmpp_2m: DiffusionSampler.SAMPLER_K_DPMPP_2M
 }
