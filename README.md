@@ -72,6 +72,39 @@ try {
 }
 ```
 
+## Example with a lot of options:
+
+```js
+const imgBuffer =  Buffer.from(base64ImageRaw, 'base64');
+const api = await generate({
+      prompt: `amazing looking room, Dean Norton style`,
+      apiKey: process.env.STABLE_DIFFUSION_KEY,
+      width: 512,
+      height: 512,
+      steps: 10,
+      engine: 'stable-diffusion-512-v2-1',
+      cfgScale: 10,
+      noStore: true, //means it will not store in the .out dir after generation.
+      imagePrompt: {
+          mime: 'image/png',
+          content: imgBuffer
+     },
+      samples: 1,
+      diffusion: 'ddim',
+      outDir: '/output'
+})
+    
+ api.on('image', async ({ buffer, imagePath }) => {
+     // upload somewhere probably..
+     
+    })
+  
+api.on('end', (data) => {
+      console.log('Generating Complete', data);
+    })
+
+```
+
 ## CLI
 
 ```sh
