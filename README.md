@@ -76,6 +76,7 @@ try {
 
 ```js
 const imgBuffer =  Buffer.from(base64ImageRaw, 'base64');
+
 const api = await generate({
       prompt: `amazing looking room, Dean Norton style`,
       apiKey: process.env.STABLE_DIFFUSION_KEY,
