@@ -75,7 +75,7 @@ try {
 ## Example with a lot of options:
 
 ```js
-const imgBuffer =  Buffer.from(base64ImageRaw, 'base64');
+const imgBuffer = Buffer.from(base64ImageRaw, 'base64')
 
 const api = await generate({
   prompt: `amazing looking room, Dean Norton style`,
@@ -88,21 +88,20 @@ const api = await generate({
   noStore: false, // if set to true, it won't save files to outDir after generation.
   imagePrompt: {
     mime: 'image/png',
-    content: imgBuffer
+    content: imgBuffer,
   },
   samples: 1,
   diffusion: 'ddim',
-  outDir: '/output'
+  outDir: '/output',
 })
-    
+
 api.on('image', async ({ buffer, imagePath }) => {
   // upload somewhere probably..
 })
-  
+
 api.on('end', (data) => {
   console.log('Generating Complete', data)
 })
-
 ```
 
 ## CLI
