@@ -32,8 +32,8 @@ type DraftStabilityOptions = Partial<{
   engine: string
   host: string
   seed: number | Array<number>
-  width: number
-  height: number
+  width: number | null
+  height: number | null
   diffusion: keyof typeof diffusionMap
   steps: number
   cfgScale: number
@@ -87,8 +87,8 @@ const withDefaults: (
     engine: draft.engine ?? 'stable-diffusion-v1',
     requestId,
     seed: draft.seed ?? range(0, 4294967295),
-    width: draft.width ?? 512,
-    height: draft.height ?? 512,
+    width: draft.width ?? null,
+    height: draft.height ?? null,
     diffusion: draft.diffusion ?? 'k_lms',
     steps: draft.steps ?? 50,
     cfgScale: draft.cfgScale ?? 7,
@@ -166,8 +166,8 @@ export const generate: (
   }
 
   const image = new ImageParameters()
-  image.setWidth(width)
-  image.setHeight(height)
+  if(width !== null) image.setWidth(width)
+  if(height !== null) image.setHeight(height)
   image.setSeedList(typeof seed === 'number' ? [seed] : seed)
   image.setSteps(steps)
   image.setSamples(samples)
