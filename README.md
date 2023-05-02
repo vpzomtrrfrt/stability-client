@@ -125,7 +125,7 @@ Options:
   -S, --seed <seed>                random seed to use (default: 1614811539)
   -n, --num_samples <num_samples>  number of samples to generate (default: 1)
   -e, --engine <engine>            engine to use for inference (default: "stable-diffusion-v1")
-  --no-store                       do not write aritfacts to disk
+  --no-store                       do not write artifacts to disk
   -k, --api-key <api-key>          DreamStudio API Key (env: DREAMSTUDIO_API_KEY)
   -o, --output-dir <outputDir>     directory to store images (defaults to cwd)
   -d, --debug                      Additional logging
